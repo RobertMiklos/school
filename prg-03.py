@@ -6,3 +6,5 @@ for x in numbers:
     sum += x
     cnt += 1
 print(sum)
+
+# sečte to všechny čísla v listu 
