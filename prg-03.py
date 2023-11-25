@@ -7,4 +7,4 @@ for x in numbers:
     cnt += 1
 print(sum)
 
-# sečte to všechny čísla v listu 
+# sečte to všechny čísla v  
