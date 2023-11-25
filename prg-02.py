@@ -6,3 +6,5 @@ for x in numbers:
         result += 1 
         
 print(result)
+
+# sečte to kolik je tam sudých čísel 
