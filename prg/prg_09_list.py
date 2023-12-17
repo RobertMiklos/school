@@ -1,10 +1,7 @@
-list = [1,-6,4,7,-9,8]
-cnt = 0
+numbers = [1,6,4,7,9,8]  
+average = sum(numbers) / len(numbers)
+average = round(average, 2)
 
-for x in list:
-    if x < 0:
-        cnt += 1
+print(average)
 
-print(cnt)       
-
-# sečte to všechny záporná čísla 
+# udělá průměr čísel v listu a zaokrouhlího na 2 desetiná místa 
