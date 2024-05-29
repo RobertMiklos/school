@@ -6,6 +6,6 @@ if position > len(list):
     print("pozice je mimo seznam")
 else:
     list.insert(position,change)
-    print(lisst)
+    print(list)
 
 # program se tě zeptá na jokuo pozici se má přidat tebou zvolené číslo a přidá ho tam (kdyby byla pozice větší jak list tak program vypíše chybu) a vypíše list 
