@@ -22,6 +22,6 @@ def decrypt_cypher(encrypted_msg,key_to_encrypt):
     return(result)
 
 print(f"Šifrovala se tahle správa '{msg_to_encrypt}'")
-print(f"Klíč který jsem použil {key_to_encrypt}")
+print(f"Klíč který jsem použil '{key_to_encrypt}'")
 print(encrypt_cypher(msg_to_encrypt,key_to_encrypt))
 print(decrypt_cypher(encrypted_msg,key_to_encrypt))
