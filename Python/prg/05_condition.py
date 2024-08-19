@@ -5,4 +5,4 @@ if height < 160:
 else:
     print("You can go.")   
 
-    # zadáte svou výšku a uvidíte jestly můžete jít nebo ne  
+# zadáte svou výšku a uvidíte jestly můžete jít nebo ne  

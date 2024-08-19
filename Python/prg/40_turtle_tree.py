@@ -24,7 +24,7 @@ t.right(140)
 t.forward(70)
 t.left(140)
 t.forward(130)
-# 
+# druhá půlka
 t.left(90)
 t.forward(110)
 t.left(130)

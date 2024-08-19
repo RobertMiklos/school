@@ -6,3 +6,5 @@ def abs(n):
 num = int(input("zadej číslo: "))
 
 print(abs(num))
+
+# definice absolutné hodnoty
