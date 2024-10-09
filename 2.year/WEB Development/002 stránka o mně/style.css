@@ -1,0 +1,43 @@
+body{
+    background: linear-gradient(to right,  rgb(227, 72, 134), rgb(113, 238, 243), rgb(161, 238, 79));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-size: larger;
+}
+
+div{
+    
+}
+
+#header_name{
+    /* background-color: red; */
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    text-align: center;
+    margin-left: 42%;
+    margin-right: 42%;
+}
+
+#article_1{
+    background-color: red;
+    border: solid 1px;
+    float:left;
+    margin-left: 20px;
+}
+
+#article_2{
+    /* background-color: red; */
+    border: solid 1px;
+    float: left;
+    padding-bottom: 44px;
+    margin-left: 33%;
+    margin-right: 20%;
+}
+
+#article_3{
+    /* background-color: red; */
+    border: solid 1px;
+    padding-bottom: 22px;
+    margin-left: 83%;
+    margin-right: 20px;
+}
