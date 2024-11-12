@@ -1,0 +1,122 @@
+{
+  "1": {
+    "question": "Kolik je 1+1?",
+    "answer": "2",
+    "gift": "plyšového medvídka"
+  },
+  "2": {
+    "question": "Kolik je 5-3?",
+    "answer": "2",
+    "gift": "krabičku čokolády"
+  },
+  "3": {
+    "question": "Kolik je 3+4?",
+    "answer": "7",
+    "gift": "vstupenku na koncert"
+  },
+  "4": {
+    "question": "Kolik je 10-6?",
+    "answer": "4",
+    "gift": "balíček kávy"
+  },
+  "5": {
+    "question": "Jaké je hlavní město Francie?",
+    "answer": "Paříž",
+    "gift": "kreativní zápisník"
+  },
+  "6": {
+    "question": "Kolik je 8 děleno 2?",
+    "answer": "4",
+    "gift": "sada malování"
+  },
+  "7": {
+    "question": "Jak se jmenuje největší oceán na Zemi?",
+    "answer": "Tichý oceán",
+    "gift": "plážový ručník"
+  },
+  "8": {
+    "question": "Kdo napsal knihu 'Harry Potter'?",
+    "answer": "J.K. Rowlingová",
+    "gift": "klíčenku v podobě kouzelné hůlky"
+  },
+  "9": {
+    "question": "Kolik je 9+10?",
+    "answer": "19",
+    "gift": "dárkový poukaz do knihkupectví"
+  },
+  "10": {
+    "question": "Co je hlavní složkou čokolády?",
+    "answer": "Kakaové boby",
+    "gift": "luxusní bonboniéru"
+  },
+  "11": {
+    "question": "Jaké je hlavní město Japonska?",
+    "answer": "Tokio",
+    "gift": "origami set"
+  },
+  "12": {
+    "question": "Kolik má měsíc dní?",
+    "answer": "30 nebo 31 (s výjimkou února)",
+    "gift": "skvělý zápisník"
+  },
+  "13": {
+    "question": "Kdo objevil Ameriku?",
+    "answer": "Kryštof Kolumbus",
+    "gift": "mapu světa"
+  },
+  "14": {
+    "question": "Jak se jmenuje nejvyšší hora světa?",
+    "answer": "Mount Everest",
+    "gift": "termosku na hory"
+  },
+  "15": {
+    "question": "Kolik je 25 děleno 5?",
+    "answer": "5",
+    "gift": "sada na čaj"
+  },
+  "16": {
+    "question": "Kdy byla založena Česká republika?",
+    "answer": "1. ledna 1993",
+    "gift": "skvostný hrníček s českým motivem"
+  },
+  "17": {
+    "question": "Který jazyk je oficiálním jazykem v Brazílii?",
+    "answer": "Portugalština",
+    "gift": "brazilské kávové zrno"
+  },
+  "18": {
+    "question": "Jaký je chemický symbol pro vodu?",
+    "answer": "H2O",
+    "gift": "sklenici s vodou a citrónem"
+  },
+  "19": {
+    "question": "Co je největší žijící zvíře na světě?",
+    "answer": "Modrá velryba",
+    "gift": "plyšovou velrybu"
+  },
+  "20": {
+    "question": "Kdo napsal knihu 'Sto roků samoty'?",
+    "answer": "Gabriel García Márquez",
+    "gift": "dárkovou knihu"
+  },
+  "21": {
+    "question": "Jaká je největší planeta v naší sluneční soustavě?",
+    "answer": "Jupiter",
+    "gift": "model sluneční soustavy"
+  },
+  "22": {
+    "question": "Jaký je název nejslavnějšího fotbalového turnaje na světě?",
+    "answer": "FIFA World Cup",
+    "gift": "fotbalový míč"
+  },
+  "23": {
+    "question": "Jaké je hlavní město Španělska?",
+    "answer": "Madrid",
+    "gift": "fanouškovský šál"
+  },
+  "24": {
+    "question": "Co je symbolem Vánoc?",
+    "answer": "Stromeček",
+    "gift": "světelný řetěz na stromeček"
+  }
+}
