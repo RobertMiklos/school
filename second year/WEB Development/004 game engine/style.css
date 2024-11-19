@@ -1,0 +1,57 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#unity{
+    width: 500px;
+    display: block;
+    margin: 0 auto;
+}
+
+
+body{
+    background-color: rgb(224, 222, 222);
+}
+
+.container{
+    height: 500px;
+    width: 900px;
+    /* display: flex; */
+    margin: auto;
+}
+
+ul{
+    list-style: none;
+    
+}
+
+.games img{
+    width: 250px;
+}
+
+.games div{
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+    margin: 10px;
+    border: 1px solid black ;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+button{
+    padding: 5px ;
+    width: 100px;
+    margin-top: 10px;
+    border-radius: 8px;
+    color: white;
+    background-color: lightcoral;
+}
+
+.games p{
+    padding: 10px;
+    height: 100px;
+}
+
