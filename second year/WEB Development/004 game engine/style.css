@@ -4,7 +4,7 @@
 }
 
 body{
-    background-color: rgb(145, 150, 145);
+    background-color: rgb(195, 199, 195);
 }
 
 #unity{
@@ -20,7 +20,7 @@ body{
     height: 920px;
     width: 1280px;
     margin: auto;
-    background-color: rgb(233, 169, 147);
+    background-color: rgb(182, 185, 189);
 }
 
 .container h1{
