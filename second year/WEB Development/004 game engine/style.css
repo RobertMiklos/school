@@ -17,7 +17,7 @@ body{
 
 
 .container{
-    height: 950px;
+    height: 920px;
     width: 1280px;
     margin: auto;
     background-color: rgb(233, 169, 147);
@@ -68,5 +68,13 @@ button{
 footer{
     font-size: larger;
     font-family: 'Franklin Gothic Medium';
-    
+    width: 100%;
+    height: 50px;
+    background-color: black;
+    text-align: center;
+    color:white;
+}
+
+footer p{
+    padding-top: 12px;
 }
