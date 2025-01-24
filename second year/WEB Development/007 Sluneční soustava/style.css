@@ -97,18 +97,65 @@
     z-index: 10;
 }
 
+.merkur{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: orange;
+    animation: orbit 20s linear infinite;
+    border-radius: 50%;
+}
+
+.venus{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(150, 147, 147);
+    animation: orbit1 25s linear infinite;
+    border-radius: 50%;
+}
+
+.earth{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: blue;
+    animation: orbit2 30s linear infinite ;
+    border-radius: 50%;    
+}
+
+.moon{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: lightgrey;
+    animation: rotate 10s linear infinite;
+    margin: 5px;
+}
+
 @keyframes orbit{
-    to{
-        transform: rotate(360deg);
+    0% {
+        transform: rotate(0deg) translateX(150px);
+    }
+    100% {
+        transform: rotate(360deg) translateX(150px);
     }
 }
 
-.merkur{
-    width: 40px;
-    height: 40px;
-    top: 5em;
-    left: 5em;
-    animation: orbit 20s linear infinite;
-    background-color: aqua;
-    z-index: 10;
+@keyframes orbit1{
+    0% {
+        transform: rotate(0deg) translateX(300px);
+    }
+    100% {
+        transform: rotate(360deg) translateX(300px);
+    }
+}
+
+@keyframes orbit2{
+    0% {
+        transform: rotate(0deg) translateX(450px);
+    }
+    100% {
+        transform: rotate(360deg) translateX(450px);
+    }
 }
