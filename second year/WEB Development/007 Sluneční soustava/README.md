@@ -1,2 +1,2 @@
 <h1>Sluneční soustava</h1>
-<img src="screenshot.PNG" href="">
+<img src"Ss_s_1.PNG">
