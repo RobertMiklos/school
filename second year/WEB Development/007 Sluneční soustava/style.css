@@ -83,8 +83,8 @@
 .merkur{
     height: 20px;
     width: 20px;
-    background-color: rgb(104, 104, 99);
-    animation: rotate-merkur 3.5s linear infinite;
+    animation: rotate-merkur 4.5s linear infinite;
+    background: linear-gradient(90deg, rgb(104, 104, 99), rgb(61, 61, 58), rgb(0, 0, 0));
 }
 @keyframes rotate-venus{
     0%{
@@ -97,8 +97,8 @@
 .venus{
     height: 30px;
     width: 30px;
-    background-color: rgb(194, 181, 108);
-    animation: rotate-venus 5s linear infinite;
+    animation: rotate-venus 6s linear infinite;
+    background: linear-gradient(90deg, rgb(194, 181, 108), rgb(75, 70, 42), rgb(0, 0, 0));
 }
 @keyframes rotate-earth{
     0%{
@@ -111,11 +111,11 @@
 .earth{
     height: 40px;
     width: 40px;
-    background-color: rgb(98, 169, 236);
-    animation: rotate-earth 7s linear infinite;
+    animation: rotate-earth 8s linear infinite;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: linear-gradient(90deg, rgb(98, 169, 236), rgb(39, 67, 94), rgb(0, 0, 0));
 }
 @keyframes rotate-moon{
     0%{
@@ -128,8 +128,8 @@
 .moon{
     height: 10px;
     width: 10px;
-    background-color: rgb(207, 206, 206);
-    animation: rotate-moon 1s linear infinite;
+    animation: rotate-moon 2s linear infinite;
+    background: linear-gradient(90deg, rgb(207, 206, 206), rgb(105, 104, 104), rgb(0, 0, 0));
 }
 .star-1, .star-2, .star-3{
     position: absolute;
