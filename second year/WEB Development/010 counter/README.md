@@ -1,6 +1,6 @@
 # Counter
 - 3 tlačítka a číslo
-- zmáčknutím tlačítka číslo změnšíte, zvětšíte nebo resetnete
+- zmáčknutím tlačítka číslo zmenšíte, zvětšíte nebo resetnete
 
 - autor: **`Robert Mikloš`**
 - datum: **`14.02.2025`**
