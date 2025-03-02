@@ -7,7 +7,7 @@
 - třída: **`2.ITE`**
 - datum: **`09.02.2025`**
 
-![první screenshot](screen-header-1.png)
-![první screenshot](screen-footer-1.png)
-![první screenshot](screen-header-2.png)
-![první screenshot](screen-footer-2.png)
+![první screenshot](full_1.png)
+![první screenshot](full_2.png)
+![první screenshot](sm_1.png)
+![první screenshot](sm_2.png)
