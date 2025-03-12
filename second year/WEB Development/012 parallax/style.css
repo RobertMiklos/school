@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15rem;
+    flex-direction: column; 
+}
+section{
+    width: 40rem;
+    height: 20rem;
+}
+p, h1, h3{
+    padding: 1rem;
+}
+h1, h3{
+    border-bottom: solid white 0.1rem;
+}
+header{
+    border-radius: 1rem;
+    background-color: aqua;
+}
+main{
+    border-radius: 1rem;
+    background-color: blueviolet;
+}
