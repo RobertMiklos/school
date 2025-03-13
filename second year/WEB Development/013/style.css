@@ -9,6 +9,8 @@ header{
     padding: 1em;
     font-size: 2em;
     background-color: rgb(24, 24, 24);
+    position: sticky;
+    top: 0;
 }
 nav ul{
     list-style: none;
@@ -24,8 +26,9 @@ nav ul li a, header a{
 a:active{
     color: white;
 }
-a:hover{
-    transform: scale(150%);
+.hamburger{
+    display: none;
+    cursor: pointer;
 }
 /* main */
 main{
@@ -47,7 +50,28 @@ h1::after{
 article{
     padding: 1em 1em;
     color: white;
+    font-size: 170%;
 }
 body{
     background-color: rgb(52, 51, 51);
+}
+/* media */
+@media (max-width: 1024px){
+    header{
+        font-size: 1.3em;
+    }
+    article{
+        font-size: 130%;
+    }
+    main h1{
+        font-size: 130%;
+    }
+}
+@media (max-width: 768px){
+    .idk{
+        display: none;
+    }
+    .hamburger{
+        display: block;
+    }
 }
