@@ -1,4 +1,4 @@
-# Exeptions
+# Exceptions
 
 -  Exeption ( vyjímka ) je událost která nastane během provádění programu a naruší normální běh programu.
 
@@ -14,7 +14,7 @@ print(num1 / num2)
 #  ZeroDivisionError: division by zero
 ```
 
-- Program se zastaví a vyhodí to ZeroDivisionError ( exeption ) tím že se snaží udělat 7 : 0 
+- Program se zastaví a vyhodí to ZeroDivisionError ( exception ) tím že se snaží udělat 7 : 0 
 
 ## Usual Exeptions
 
@@ -36,7 +36,7 @@ len(12345)
 int("hello")
 ```
 
-# Exeptions Handling
+# Exceptions Handling
 
 - aby se program nezastavil používá se **try/except**
 
@@ -97,3 +97,17 @@ else:
 # 3
 # 4
 ```
+
+# Raise Exceptions
+
+``` python
+num = 102
+if num > 100:
+  raise ValueError
+
+# Traceback (most recent call last):
+#   File "./Playground/file0.py", line 3, in <module>
+#       raise ValueError
+# ValueError
+```
+
