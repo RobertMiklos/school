@@ -1,0 +1,115 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+}
+body{
+    margin: 0 20em 0 20em;
+    background-color: rgb(48, 47, 47);
+}
+header{
+    text-align: center;
+    padding: 2.5em 0 2.5em 0;
+    background-color: rgb(40, 39, 39);
+}
+main{
+    background-color: rgb(40, 39, 39);
+    padding: 2em 2em 2em 2em;
+}
+h2{
+    padding: 1.5em 0 1.5em 0;
+}
+.filtrTable table, tr, th, td{
+    border: solid black 1px;
+    border-collapse: collapse;
+}
+.filtrTable{
+    margin: 0 0 4em 0;
+}
+.filtrTable table tr th{
+    height: 2.7em;
+}
+.filtrTable table tr{
+    height: 2.5em;
+}
+.filtrTable table tr th, td{
+    padding: 0 2em 0 2em;
+}
+nav ul{
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 1.5em 0 0 0;
+    gap: 3em;
+}
+nav ul li a{
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+nav ul li a:hover{
+    color: rgb(0, 0, 0);
+    transform: scale(1.2);
+    border-bottom: solid 0.1em white;
+}
+nav ul li a:active{
+    color: rgb(181, 179, 179);
+}
+footer{
+    background-color: rgb(40, 39, 39);
+    text-align: center;
+    padding: 2.5em 0;
+}
+section{
+    background-color: rgb(72, 70, 70);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    border-radius: 1em;
+    padding: 2em;
+    box-shadow: 0 0 1em black;
+}
+th input{
+    border-radius: 0.3em;
+    border: 0.1em solid black;
+    padding: 0.3em;
+    transition: transform 0.3 ease;
+}
+th input:hover{
+    transform: scale(1.1);
+    background-color: rgb(146, 144, 144);
+}
+table tr:nth-child(odd){
+    background-color: rgb(52, 50, 50);
+}
+table tr:nth-child(even){
+    background-color: rgb(70, 68, 68);
+}
+table{
+    width: 42em;
+}
+#menuInput{
+    border-radius: 0.3em;
+    border: 0.1em solid black;
+    padding: 0.8em;
+    width: 50em;
+    background-color: rgb(52, 50, 50);
+}
+select{
+    width: 100%;
+    border-radius: 0.3em;
+    padding: 0.8em;
+    border: 0.1em solid black;
+    background-color: rgb(52, 50, 50);
+}
+#menuBtn{
+    border-radius: 0.3em;
+    padding: 0.8em;
+    border: 0.1em solid black;
+    margin: 0 auto;
+    display: block;
+    width: 10em;
+    background-color: rgb(52, 50, 50);
+}
