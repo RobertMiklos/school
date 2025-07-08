@@ -1,0 +1,61 @@
+body {
+    background-color: #252525;
+}
+
+.container {
+    background-color: rebeccapurple;
+    width: 80%;
+    margin: auto;
+    display: flex;
+}
+
+.text {
+    background-color: #BBB;
+    width: 100%;
+}
+
+.image {
+    background-color: rebeccapurple;
+    width: 100%;
+    height: 300px;
+}
+
+.arti{
+    background-color: aqua;
+    width: 100%;
+}
+
+@media only screen and (max-width:1200px) {
+    .image {
+        background-color: blue;
+    }
+
+    .text{
+        background-color: red;
+    }
+
+    .arti{
+        background-color: chartreuse;
+    }
+}
+
+
+@media only screen and (max-width: 576px) {
+
+    .container {
+        width: 95%;
+        flex-wrap: wrap;
+    }
+
+    .image {
+        background-color: green;
+    }
+
+    .text{
+        background-color: crimson;
+    }
+
+    .arti{
+        background-color: deeppink;
+    }
+}

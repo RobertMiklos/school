@@ -1,0 +1,22 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    background-color: rgb(188, 243, 225);
+}
+.container{
+    background-color: white;
+    margin: 10% 20% 10% 20%;
+    padding: 0.5em;
+}
+.skupka p{
+    padding: 0.5em 1em;
+    margin: 0.3em 2em;
+    background-color: red;
+    border-radius: 1.5em;
+}
+.skupka :hover{ 
+    background-color: black;
+    color: white;
+}

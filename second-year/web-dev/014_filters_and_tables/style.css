@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+    box-sizing: border-box;
+}
+body {
+    margin: 0 2em;
+    background-color: rgb(48, 47, 47);
+}
+header {
+    text-align: center;
+    padding: 2.5em 0;
+    background-color: rgb(40, 39, 39);
+}
+main {
+    background-color: rgb(40, 39, 39);
+    padding: 2em;
+}
+h2 {
+    margin-bottom: 1em;
+}
+section {
+    background-color: rgb(72, 70, 70);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1em;
+    padding: 2em;
+    box-shadow: 0 0 1em black;
+    text-align: center;
+    margin-bottom: 4em;
+}
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding-top: 1.5em;
+    gap: 3em;
+}
+nav ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+nav ul li a:hover {
+    color: rgb(0, 0, 0);
+    transform: scale(1.2);
+    border-bottom: solid 0.1em white;
+}
+nav ul li a:active {
+    color: rgb(181, 179, 179);
+}
+footer {
+    background-color: rgb(40, 39, 39);
+    text-align: center;
+    padding: 2.5em 0;
+}
+table {
+    width: 100%;
+    max-width: 42em;
+    border-collapse: collapse;
+    margin-top: 1em;
+}
+.filtrTable table, th, td {
+    border: solid black 1px;
+}
+.filtrTable table th {
+    height: 2.7em;
+}
+.filtrTable table tr {
+    height: 2.5em;
+}
+.filtrTable table th, td {
+    padding: 0.5em 2em;
+}
+table tr:nth-child(odd) {
+    background-color: rgb(52, 50, 50);
+}
+table tr:nth-child(even) {
+    background-color: rgb(70, 68, 68);
+}
+th input {
+    border-radius: 0.3em;
+    border: 0.1em solid black;
+    padding: 0.3em;
+    background-color: rgb(52, 50, 50);
+    transition: transform 0.3s ease;
+    width: 80%;
+}
+th input:hover {
+    transform: scale(1.05);
+    background-color: rgb(146, 144, 144);
+}
+#menuInput, select {
+    width: 100%;
+    max-width: 50em;
+    border-radius: 0.3em;
+    padding: 0.8em;
+    border: 0.1em solid black;
+    background-color: rgb(52, 50, 50);
+    margin-bottom: 1em;
+}
+#menuBtn {
+    border-radius: 0.3em;
+    padding: 0.8em;
+    border: 0.1em solid black;
+    margin: 1em auto 0;
+    display: block;
+    width: 10em;
+    background-color: rgb(52, 50, 50);
+    transition: transform 0.3s ease;
+}
+#menuBtn:hover {
+    background-color: rgb(80, 78, 78);
+    transform: scale(1.1);
+}
+@media (max-width: 768px) {
+    body {
+        margin: 0 1em;
+    }
+    #menuInput, select {
+        max-width: 100%;
+    }
+    table {
+        max-width: 100%;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 1em;
+    }
+}
