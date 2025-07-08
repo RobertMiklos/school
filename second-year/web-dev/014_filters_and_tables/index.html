@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filt Měst</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Ukázka filtrování dat</h1>
+
+        <nav>
+            <ul>
+                <li><a href="#">Tabulka</a></li>
+                <li><a href="#">Formulář</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="filtrTable">
+            <h2>Filtrování tabulky podle jména měst</h2>
+
+            <table>
+                <tr>
+                    <th>Id</th>
+                    <th>Město: <input type="text"></th>
+                    <th>Počet obyvatel</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Varnsdorf</td>
+                    <td>15 000</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Liberec</td>
+                    <td>100 000</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Praha</td>
+                    <td>2 000 000</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Rumburk</td>
+                    <td>170 000</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Humpolec</td>
+                    <td>20 000</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Ustí nad Labem</td>
+                    <td>180</td>
+                </tr>
+            </table>
+        </section>
+        <section class="filtrForm">
+            <h2>Filtrování ve výběrovém menu podle jména měst</h2>
+
+            <form action="#">
+                <input type="text" id="menuInput"><br><br>
+
+                <select name="" id="citySelect">
+                    <option value="">Praha</option>
+                    <option value="">Varnsdorf</option>
+                    <option value="">Liberec</option>
+                    <option value="">Humpolec</option>
+                    <option value="">Ustí nad Labem</option>
+                    <option value="">Rumburk</option>
+                </select><br><br>
+
+                <button id="menuBtn">Filtrovat</button>
+            </form>
+
+            <table>
+
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy Robert Mikloš</p>
+    </footer>
+</body>
+<script src="script.js"></script>
+</html>
