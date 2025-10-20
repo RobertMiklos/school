@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Zadání pro kozáka</h1>
+    <p><b>Kozáku</b> to stačí!</p>
+
+    <script>
+        let idk = document.querySelector("b")
+        idk.addEventListener("mouseenter", () => {
+            idk.style.fontWeight = "normal"
+            idk.style.fontStyle = "italic"
+        })
+        idk.addEventListener("mouseout", () => {
+            idk.style.fontWeight = "bold"
+            idk.style.fontStyle = "normal"
+        })
+    </script>
+</body>
+</html>
