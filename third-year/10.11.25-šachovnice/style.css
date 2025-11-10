@@ -1,0 +1,31 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #333;
+    height: 100vh;
+}
+#main{
+    width: 50em;
+    height: 50em;
+    display: grid;
+    grid-template-columns: repeat(10, 5em);
+    grid-template-rows: repeat(10, 5em);
+    border: 2px solid black;
+}
+.square{
+    transition: background 0.2s ease;
+}
+button{
+    margin: 3em 0 0 0;
+    padding: 2em 5em;
+    border-radius: 2em;
+    background: linear-gradient(rgb(58, 195, 236), rgb(45, 46, 104));
+}
+.black{
+    background: black;
+}
+.white{
+    background: white;
+}
