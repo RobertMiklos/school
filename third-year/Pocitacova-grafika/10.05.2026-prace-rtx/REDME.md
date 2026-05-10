@@ -1,0 +1,1 @@
+# Dobrý den omlouvám se, bohužel mi nejde přidat soubor do zadání tak ho odevzdávám přes github. Snad to nebude vadit. :D
