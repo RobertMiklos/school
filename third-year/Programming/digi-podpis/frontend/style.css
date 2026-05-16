@@ -1,0 +1,85 @@
+:root {
+    --primary-color: #9290C3;
+    --secondary-color: #535C91;
+    --third-color: #1B1A55;
+    --fourth-color: #b8b7e0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10em 0 0 0;
+}
+
+#container {
+    background-color: var(--primary-color);
+    width: 50em;
+    border-radius: 1em;
+}
+
+#container h1 {
+    padding: 1em 2em 0 2em;
+}
+
+#container input {
+    border: var(--primary-color) 0.2em dotted;
+    border-radius: 0.5em;
+    margin: 0.2em 0 0 2em;
+    padding: 0.3em 0.5em;
+    background-color: var(--fourth-color);
+}
+
+#content {
+    height: 20em;
+    background-color: var(--fourth-color);
+    margin: 1em 2em 0 2em;
+    border-radius: 0.5em;
+    white-space: pre-wrap;
+}
+
+#chooseFile {
+    margin: 0 2em 0 2em;
+}
+
+#chooseUser {
+    margin: 2em 0 0 1em;
+}
+
+#container select {
+    margin: 1em 2em 0 2em;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+
+#container button {
+    padding: 1em 2em;
+    margin: 1em 25em;
+    background-color: var(--third-color);
+    color: white;
+    border-radius: 0.5em;
+    border: 0em;
+    cursor: pointer;
+}
+
+p {
+    background-color: black;
+    margin: 1em;
+    white-space: pre-wrap;
+}
+
+/* input[type="file"] {
+    display: none;
+}
+
+#chooseFile {
+    display: inline-block;
+    padding: 1em 1em;
+    background-color: var(--fourth-color);
+} */
