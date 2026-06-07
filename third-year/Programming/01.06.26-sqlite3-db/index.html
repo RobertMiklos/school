@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form for information</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Form for info</h1>
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" class="textInput">
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" class="textInput">
+
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="password" class="textInput">
+
+        <br>
+
+        <input type="submit" value="Submit" id="submit">
+    </form>
+
+    <table>
+        <tr>
+            <th id="thId">1</th>
+            <th class="thData">username</th>
+            <th class="thData">email</th>
+            <th class="thData">password</th>
+            <th id="thCancel"><button>X</button></th>
+        </tr>
+    </table>
+    <script src="script.js"></script>
+</body>
+</html>
