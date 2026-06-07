@@ -1,0 +1,72 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 6em 0;
+}
+h1{
+    margin: 0 12em 9em 0;
+    position: absolute;
+    background-color: white;
+    padding: 0 0.8em;
+    font-size: 2.5em;
+}
+form{
+    border: black 0.1em solid;
+    padding: 4em 4em 0 4em;
+    border-radius: 0.5em;
+}
+.textInput{
+    padding: 0.4em;
+    border-radius: 0.3em;
+}
+#submit{
+    margin: 4em 50% 2em 50%;
+    padding: 1.5em 5em;
+    transform: translateX(-50%);
+    background-color: lightgray;
+    border: 0.1em solid black;
+    border-radius: 0.5em;
+}
+label{
+    font-weight: bold;
+}
+table{
+    border: 0.1em solid black;
+    border-radius: 0.5em;
+    margin: 4em 0 0 0;
+    width: 58.5em;
+    padding: 0.5em 5em;
+}
+tr{
+    height: 2.5em;
+}
+.thData{
+    width: 17em;
+    background-color: lightgray;
+    border: 0.1em solid black;
+}
+#thCancel{
+    width: 2em;
+    padding: 0.2em;
+    background-color: lightgray;
+    border: 0.1em solid black;
+}
+#thCancel button{
+    background-color: lightcoral;
+    width: 2em;
+    height: 2em;
+    border: 0.1em solid black;
+}
+#thId{
+    background-color: lightgray;
+    border: 0.1em solid black;
+    width: 3em;
+    height: 2em;
+}
