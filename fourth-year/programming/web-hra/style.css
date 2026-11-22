@@ -1,0 +1,1645 @@
+/* ==========================================================================
+   ElektroRozvaděč - Stylopis pro výukový simulátor zapojování rozvaděče
+   Čisté CSS bez externích závislostí
+   ========================================================================== */
+
+:root {
+  /* Barevná paleta */
+  --bg-app: #121820;
+  --bg-card: #1c2430;
+  --bg-panel: #232d3d;
+  --bg-enclosure: #2a3547;
+  --border-color: #3b4b63;
+  --border-focus: #4dabf7;
+
+  /* Barvy vodičů dle norem */
+  --wire-l: #8d4925;
+  --wire-l-hover: #b05c2e;
+  --wire-n: #0288d1;
+  --wire-n-hover: #29b6f6;
+  --wire-pe-green: #2e7d32;
+  --wire-pe-yellow: #ffeb3b;
+
+  /* Stavy a indikace */
+  --color-success: #2e7d32;
+  --color-success-light: #4caf50;
+  --color-danger: #d32f2f;
+  --color-danger-light: #f44336;
+  --color-warning: #f57c00;
+  --color-info: #0288d1;
+
+  /* Text */
+  --text-primary: #f0f4f8;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Svorky */
+  --term-brass: #d4af37;
+  --term-brass-dark: #aa8c2c;
+  --term-silver: #b0bec5;
+
+  /* DIN lišta */
+  --din-rail-bg: linear-gradient(180deg, #9e9e9e 0%, #cfcfcf 50%, #757575 100%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+/* ==========================================================================
+   Struktura aplikace a hlavička
+   ========================================================================== */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1540px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.main-header {
+  background-color: var(--bg-card);
+  border-bottom: 2px solid var(--border-color);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 2rem;
+  background: linear-gradient(135deg, #ffd700, #ff8c00);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.main-header h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.level-indicator-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 6px 18px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.level-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64b5f6;
+  letter-spacing: 0.05em;
+}
+
+.level-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   Tlačítka
+   ========================================================================== */
+
+.btn {
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background-color: #0288d1;
+  color: #fff;
+  border-color: #039be5;
+  box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #039be5;
+  box-shadow: 0 4px 14px rgba(2, 136, 209, 0.5);
+}
+
+.btn-success {
+  background-color: #2e7d32;
+  color: #fff;
+  border-color: #388e3c;
+  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+}
+
+.btn-success:hover {
+  background-color: #388e3c;
+  box-shadow: 0 4px 14px rgba(46, 125, 50, 0.5);
+}
+
+.btn-secondary {
+  background-color: var(--bg-panel);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: #2e3a4e;
+  border-color: #4a5d7b;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-secondary);
+}
+
+.btn-danger {
+  color: #ff5252;
+  border-color: rgba(255, 82, 82, 0.4);
+}
+
+.btn-danger:hover {
+  background-color: rgba(255, 82, 82, 0.15);
+  border-color: #ff5252;
+}
+
+.btn-large {
+  padding: 12px 24px;
+  font-size: 1.05rem;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.8rem;
+}
+
+.btn-icon {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   Informační proužek úkolu a nápověda
+   ========================================================================== */
+
+.task-banner {
+  background-color: #19222e;
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.task-content {
+  flex: 1;
+  min-width: 300px;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.task-tag {
+  background-color: rgba(77, 171, 247, 0.15);
+  color: #64b5f6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+#task-goal-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.task-description {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.timer-box, .attempts-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.meta-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.meta-value {
+  font-family: monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffca28;
+}
+
+.hint-panel {
+  background-color: #2a2512;
+  border-bottom: 1px solid #795548;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #ffe082;
+  font-size: 0.9rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+.hint-content strong {
+  margin-right: 6px;
+}
+
+.btn-close-sm {
+  background: none;
+  border: none;
+  color: #ffe082;
+  font-size: 1.3rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+/* ==========================================================================
+   Hlavní plocha: Toolbar, Rozvaděč a Zátěž
+   ========================================================================== */
+
+.workspace {
+  display: flex;
+  flex: 1;
+  background-color: var(--bg-app);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Panel nástrojů */
+.wiring-toolbar {
+  width: 220px;
+  background-color: var(--bg-card);
+  border-right: 2px solid var(--border-color);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 25;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.wiring-toolbar h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.wire-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wire-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.wire-btn:hover {
+  background-color: #2b3749;
+  border-color: #556988;
+}
+
+.wire-btn.active {
+  border-color: #4dabf7;
+  background-color: #24354c;
+  box-shadow: 0 0 8px rgba(77, 171, 247, 0.3);
+}
+
+.wire-sample {
+  width: 24px;
+  height: 8px;
+  border-radius: 4px;
+  display: inline-block;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.auto-sample {
+  background: none;
+  width: auto;
+  height: auto;
+  font-size: 0.95rem;
+}
+
+.l-sample {
+  background-color: var(--wire-l);
+  border: 1px solid #5d2f16;
+}
+
+.n-sample {
+  background-color: var(--wire-n);
+  border: 1px solid #01579b;
+}
+
+.pe-sample {
+  background: repeating-linear-gradient(45deg, #2e7d32, #2e7d32 6px, #ffeb3b 6px, #ffeb3b 12px);
+  border: 1px solid #1b5e20;
+}
+
+.toolbar-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 4px 0;
+}
+
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wire-guide-tip {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background-color: rgba(255, 255, 255, 0.03);
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: auto;
+}
+
+.wire-guide-tip ol {
+  padding-left: 18px;
+  margin-top: 6px;
+}
+
+.wire-guide-tip code {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+/* Pracovní plocha rozvaděče */
+.board-container {
+  flex: 1;
+  display: flex;
+  position: relative;
+  background-color: #171f2a;
+  overflow: auto;
+  min-height: 580px;
+}
+
+/* ==========================================================================
+   SVG Plátno pro vodiče
+   ========================================================================== */
+
+.wires-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.wire-path {
+  fill: none;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: stroke;
+  cursor: pointer;
+  filter: url(#wire-shadow);
+  transition: stroke 0.15s ease, stroke-width 0.15s ease;
+}
+
+.wire-path:hover {
+  stroke-width: 9;
+  filter: url(#wire-glow) url(#wire-shadow);
+}
+
+.wire-path.wire-L {
+  stroke: var(--wire-l);
+}
+.wire-path.wire-L:hover {
+  stroke: var(--wire-l-hover);
+}
+
+.wire-path.wire-N {
+  stroke: var(--wire-n);
+}
+.wire-path.wire-N:hover {
+  stroke: var(--wire-n-hover);
+}
+
+.wire-path.wire-PE {
+  stroke: url(#pe-stripe-pattern);
+}
+.wire-path.wire-PE:hover {
+  stroke-width: 9;
+}
+
+.temp-wire {
+  fill: none;
+  stroke: #ffca28;
+  stroke-width: 4;
+  stroke-dasharray: 6 6;
+  pointer-events: none;
+  animation: dashMove 1s linear infinite;
+}
+
+@keyframes dashMove {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+/* ==========================================================================
+   Rozvaděčová skříň (Enclosure)
+   ========================================================================== */
+
+.enclosure {
+  flex: 1;
+  min-width: 680px;
+  background-color: var(--bg-enclosure);
+  border: 4px solid #3d4c63;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 5;
+}
+
+.enclosure-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #3c4b62;
+  padding-bottom: 8px;
+}
+
+.enclosure-badge {
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #cfd8dc;
+  letter-spacing: 0.1em;
+}
+
+.ip-rating {
+  font-size: 0.75rem;
+  background-color: #1e2633;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #90a4ae;
+}
+
+/* Horní svorkovnice (můstky) */
+.terminal-bars-area {
+  display: flex;
+  gap: 16px;
+  background-color: #1c2431;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #344257;
+}
+
+.busbar-module {
+  flex: 1;
+  border-radius: 6px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.busbar-pe {
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  border: 1px solid #4caf50;
+}
+
+.busbar-n {
+  background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+  border: 1px solid #42a5f5;
+}
+
+.busbar-n-rcd {
+  background: linear-gradient(135deg, #0277bd 0%, #0097a7 100%);
+  border: 1px dashed #4dd0e1;
+}
+
+.busbar-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+.busbar-terminals {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  padding: 6px;
+}
+
+/* DIN Lišta a modulární přístroje */
+.din-rail-area {
+  position: relative;
+  padding: 45px 12px;
+  display: flex;
+  align-items: center;
+}
+
+.din-rail {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.din-rail-metal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 38px;
+  background: var(--din-rail-bg);
+  border: 1px solid #555;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 2px 3px #fff;
+  z-index: 1;
+}
+
+.din-rail-metal::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  right: 10px;
+  transform: translateY(-50%);
+  height: 8px;
+  background: repeating-linear-gradient(90deg, #444, #444 20px, transparent 20px, transparent 36px);
+  border-radius: 2px;
+}
+
+.din-modules {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  width: 100%;
+  padding-left: 20px;
+}
+
+/* Modulární přístroj na DIN liště */
+.din-device {
+  background: linear-gradient(180deg, #eceff1 0%, #cfd8dc 100%);
+  color: #263238;
+  border-radius: 6px;
+  border: 2px solid #90a4ae;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.4), inset 0 1px 1px #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.din-device.hidden {
+  display: none !important;
+}
+
+.module-feed {
+  width: 110px;
+  background: linear-gradient(180deg, #37474f 0%, #263238 100%);
+  color: #eceff1;
+  border-color: #546e7a;
+}
+
+.module-switch {
+  width: 90px;
+}
+
+.module-rcd {
+  width: 140px;
+}
+
+.module-mcb {
+  width: 95px;
+}
+
+.device-body {
+  width: 100%;
+  padding: 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  border-top: 1px solid rgba(0,0,0,0.15);
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  min-height: 140px;
+}
+
+.device-brand {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #546e7a;
+}
+
+.device-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.device-spec {
+  font-size: 0.62rem;
+  font-family: monospace;
+  color: #546e7a;
+  background: rgba(0,0,0,0.06);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.device-icon {
+  font-size: 1.5rem;
+  margin-bottom: 2px;
+}
+
+/* Páčka vypínače / jističe */
+.switch-toggle {
+  margin-top: 6px;
+  width: 32px;
+  height: 48px;
+  background: #37474f;
+  border-radius: 4px;
+  padding: 3px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.switch-handle {
+  width: 100%;
+  height: 24px;
+  background: #d32f2f;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  transition: all 0.15s ease;
+}
+
+.switch-handle.state-on {
+  transform: translateY(0);
+  background: #d32f2f; /* Červená páčka nahoře = zapnuto dle zvyklostí */
+}
+
+.switch-handle.state-off {
+  transform: translateY(18px);
+  background: #455a64;
+}
+
+.module-switch .switch-handle {
+  background: #c62828;
+}
+
+.module-rcd .switch-handle {
+  background: #1565c0;
+}
+
+.module-mcb .switch-handle {
+  background: #212121;
+}
+
+/* Indikační okénko (zelená = bezpečně vypnuto, červená = sepnuto/pod napětím) */
+.flag-indicator {
+  width: 18px;
+  height: 6px;
+  border-radius: 2px;
+  margin-top: 4px;
+  border: 1px solid rgba(0,0,0,0.3);
+}
+
+.flag-indicator.state-on {
+  background-color: #f44336; /* Červená = sepnuto / nebezpečí napětí */
+}
+
+.flag-indicator.state-off {
+  background-color: #4caf50; /* Zelená = rozpojeno */
+}
+
+/* RCD ovládací prvky */
+.rcd-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.rcd-test-btn {
+  background: #ffb300;
+  color: #000;
+  border: 1px solid #ffa000;
+  font-size: 0.7rem;
+  font-weight: 800;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.rcd-test-btn:active {
+  transform: scale(0.9);
+}
+
+/* LED přívodu */
+.feed-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #37474f;
+  border: 1px solid #78909c;
+  margin-top: 8px;
+}
+
+.feed-indicator.active {
+  background-color: #00e676;
+  box-shadow: 0 0 10px #00e676;
+}
+
+/* ==========================================================================
+   Svorky (Terminals)
+   ========================================================================== */
+
+.device-terminals {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 6px 4px;
+  background: rgba(0,0,0,0.08);
+  min-height: 48px;
+}
+
+.term-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.term-name {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: #455a64;
+  letter-spacing: -0.02em;
+}
+
+.module-feed .term-name {
+  color: #cfd8dc;
+}
+
+.terminal {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #424242 35%, #d4af37 40%, #aa8c2c 100%);
+  border: 2px solid #5d4a1b;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4), inset 0 1px 2px #fff;
+  cursor: pointer;
+  position: relative;
+  z-index: 20;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.terminal::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+}
+
+.terminal:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 12px #ffca28, 0 3px 8px rgba(0,0,0,0.6);
+  border-color: #ffca28;
+}
+
+.terminal.selected {
+  transform: scale(1.35);
+  border-color: #00e5ff;
+  box-shadow: 0 0 16px #00e5ff, 0 0 30px rgba(0, 229, 255, 0.6);
+  animation: pulseTerminal 1s infinite alternate;
+}
+
+@keyframes pulseTerminal {
+  from {
+    box-shadow: 0 0 10px #00e5ff;
+  }
+  to {
+    box-shadow: 0 0 20px #00e5ff, 0 0 35px rgba(0, 229, 255, 0.8);
+  }
+}
+
+/* ==========================================================================
+   Panel spotřebičů a zátěže (Pravý panel)
+   ========================================================================== */
+
+.appliances-panel {
+  width: 320px;
+  background-color: var(--bg-card);
+  border-left: 2px solid var(--border-color);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 22;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.2);
+}
+
+.appliances-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.appliances-header h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.status-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background-color: #37474f;
+  color: #b0bec5;
+  text-transform: uppercase;
+}
+
+.status-badge.active {
+  background-color: #2e7d32;
+  color: #a5d6a7;
+}
+
+.status-badge.fault {
+  background-color: #c62828;
+  color: #ffcdd2;
+}
+
+.appliances-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.appliance-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: border-color 0.2s ease;
+}
+
+.appliance-card.hidden {
+  display: none !important;
+}
+
+.appliance-card.active {
+  border-color: #ffca28;
+}
+
+.appliance-visual {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.appliance-info h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.appliance-class {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.appliance-state {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ff7043;
+}
+
+.appliance-state.active {
+  color: #00e676;
+}
+
+/* Vizuál žárovky */
+.lamp-fixture {
+  width: 50px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lamp-bulb {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #546e7a 0%, #37474f 100%);
+  border: 1px solid #78909c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.lamp-filament {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #90a4ae;
+  border-bottom: none;
+  border-radius: 50% 50% 0 0;
+}
+
+.lamp-base {
+  width: 16px;
+  height: 10px;
+  background: repeating-linear-gradient(180deg, #b0bec5, #b0bec5 2px, #78909c 2px, #78909c 4px);
+  border-radius: 0 0 3px 3px;
+}
+
+.lamp-bulb.active {
+  background: radial-gradient(circle at 35% 35%, #fffde7 0%, #ffeb3b 60%, #f57f17 100%);
+  border-color: #fff9c4;
+  box-shadow: 0 0 25px #ffeb3b, 0 0 60px rgba(255, 235, 59, 0.6);
+}
+
+.lamp-bulb.active .lamp-filament {
+  border-color: #ffffff;
+  box-shadow: 0 0 10px #ffffff;
+}
+
+/* Vizuál zásuvky (ČSN typ E) */
+.socket-fixture {
+  width: 50px;
+  height: 50px;
+  background-color: #eceff1;
+  border-radius: 50%;
+  border: 3px solid #b0bec5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.socket-pin-pe {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #cfd8dc 20%, #90a4ae 100%);
+  border: 1px solid #546e7a;
+  margin-bottom: 5px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.socket-holes {
+  display: flex;
+  gap: 12px;
+}
+
+.socket-hole {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #212121;
+}
+
+.socket-led {
+  position: absolute;
+  bottom: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #9e9e9e;
+}
+
+.socket-led.active {
+  background-color: #00e676;
+  box-shadow: 0 0 8px #00e676;
+}
+
+.socket-led.fault {
+  background-color: #f44336;
+  box-shadow: 0 0 8px #f44336;
+}
+
+/* Vizuál bojleru */
+.boiler-fixture {
+  width: 50px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boiler-tank {
+  width: 44px;
+  height: 54px;
+  background: linear-gradient(135deg, #eceff1 0%, #b0bec5 100%);
+  border-radius: 8px;
+  border: 2px solid #78909c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.boiler-tank.active {
+  border-color: #ff9800;
+  box-shadow: 0 0 15px rgba(255, 152, 0, 0.4);
+}
+
+.boiler-gauge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #263238;
+  border: 1px solid #90a4ae;
+  position: relative;
+}
+
+.gauge-needle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 2px;
+  background-color: #f44336;
+  transform-origin: 0 50%;
+  transform: rotate(-45deg);
+  transition: transform 0.4s ease;
+}
+
+.boiler-tank.active .gauge-needle {
+  transform: rotate(70deg);
+}
+
+/* Svorky spotřebičů */
+.appliance-terminals {
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  padding: 6px 4px;
+}
+
+.app-term {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.term-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+/* Multimetr */
+.multimeter-box {
+  background-color: #0f141c;
+  border: 2px solid #283344;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: auto;
+}
+
+.multimeter-lcd {
+  background-color: #051a0e;
+  border: 1px solid #004d20;
+  border-radius: 4px;
+  padding: 8px 10px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.lcd-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #00e676;
+  text-shadow: 0 0 5px rgba(0, 230, 118, 0.5);
+}
+
+.lcd-label {
+  color: #008744;
+}
+
+/* ==========================================================================
+   Spodní stavová a ovládací lišta
+   ========================================================================== */
+
+.main-footer {
+  background-color: var(--bg-card);
+  border-top: 2px solid var(--border-color);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  z-index: 30;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.status-console {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 320px;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.status-console.status-success {
+  border-color: #2e7d32;
+  background-color: rgba(46, 125, 50, 0.15);
+}
+
+.status-console.status-danger {
+  border-color: #d32f2f;
+  background-color: rgba(211, 47, 47, 0.18);
+  animation: shake 0.4s ease;
+}
+
+.status-console.status-warning {
+  border-color: #f57c00;
+  background-color: rgba(245, 124, 0, 0.15);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.console-icon {
+  font-size: 1.5rem;
+}
+
+.console-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.console-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.footer-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   Modální okna
+   ========================================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-card {
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  animation: popUp 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-large {
+  max-width: 680px;
+}
+
+.modal-header {
+  padding: 18px 24px;
+  background-color: var(--bg-panel);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-header.success {
+  background: linear-gradient(135deg, #1b5e20, #2e7d32);
+}
+
+.modal-header.complete {
+  background: linear-gradient(135deg, #b78103, #e65100);
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.modal-icon {
+  font-size: 1.6rem;
+}
+
+.modal-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  padding: 14px 24px;
+  background-color: var(--bg-panel);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Statistiky a vyhodnocení v modálu */
+.level-stats-summary {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--bg-panel);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-name {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffca28;
+}
+
+.educational-tip {
+  background-color: rgba(77, 171, 247, 0.1);
+  border-left: 4px solid #4dabf7;
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.85rem;
+  color: #e3f2fd;
+}
+
+.certificate-box {
+  background: linear-gradient(135deg, #1c2635 0%, #16202c 100%);
+  border: 2px solid #d4af37;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.certificate-box h3 {
+  color: #ffca28;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.cert-text {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.final-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.final-stat {
+  background-color: rgba(0,0,0,0.3);
+  padding: 8px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fs-num {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #00e676;
+}
+
+.fs-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.disclaimer-note {
+  font-size: 0.78rem;
+  color: #ef9a9a;
+  background-color: rgba(239, 83, 80, 0.1);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+/* Statistiky tabulka */
+.stats-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.stat-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sc-title {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.sc-value {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #64b5f6;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.stats-table th, .stats-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stats-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Teorie legenda */
+.wire-legend-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.wire-legend-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+}
+
+.legend-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.l-swatch { background-color: var(--wire-l); }
+.n-swatch { background-color: var(--wire-n); }
+.pe-swatch { background: repeating-linear-gradient(45deg, #2e7d32, #2e7d32 4px, #ffeb3b 4px, #ffeb3b 8px); }
+
+.device-theory-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.device-theory-item {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.device-theory-item h4 {
+  font-size: 0.85rem;
+  color: #64b5f6;
+  margin-bottom: 4px;
+}
+
+.device-theory-item p {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+/* Třídy pomocné */
+.hidden {
+  display: none !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popUp {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responzivita pro menší obrazovky */
+@media (max-width: 1100px) {
+  .workspace {
+    flex-direction: column;
+  }
+  .wiring-toolbar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    border-right: none;
+    border-bottom: 2px solid var(--border-color);
+  }
+  .wire-selector {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .appliances-panel {
+    width: 100%;
+    border-left: none;
+    border-top: 2px solid var(--border-color);
+  }
+}

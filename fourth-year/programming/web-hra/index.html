@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ElektroRozvaděč – Výuková hra zapojování rozvaděče</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Horní navigační a informační lišta -->
+    <header class="main-header">
+      <div class="logo-area">
+        <span class="logo-icon">⚡</span>
+        <div>
+          <h1>ElektroRozvaděč</h1>
+          <p class="subtitle">Interaktivní simulátor domovního rozvaděče</p>
+        </div>
+      </div>
+
+      <div class="level-indicator-box">
+        <div class="level-badge" id="level-badge">Úroveň 1 / 5</div>
+        <div class="level-title" id="level-title">Základní světelný okruh</div>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-theory" class="btn btn-secondary" title="Zobrazit přehled teorie a norem">
+          📖 Teorie &amp; Normy
+        </button>
+        <button id="btn-stats" class="btn btn-secondary" title="Statistiky a pokrok">
+          📊 Statistiky
+        </button>
+        <button id="btn-sound" class="btn btn-icon" title="Zapnout / Vypnout zvuk">
+          🔊
+        </button>
+      </div>
+    </header>
+
+    <!-- Zadání a instrukce k aktuální úrovni -->
+    <section class="task-banner">
+      <div class="task-content">
+        <div class="task-header">
+          <span class="task-tag">Zadání úkolu:</span>
+          <span id="task-goal-text">Zapojte světelný okruh přes hlavní vypínač a jistič 10A.</span>
+        </div>
+        <p id="task-desc-text" class="task-description">
+          Fázový vodič (L) veďte z přívodu přes hlavní vypínač a jistič do světla. Nulový vodič (N) připojte na N svorkovnici a do světla.
+        </p>
+      </div>
+      <div class="task-meta">
+        <div class="timer-box">
+          <span class="meta-label">Čas úrovně:</span>
+          <span id="timer-display" class="meta-value">00:00</span>
+        </div>
+        <div class="attempts-box">
+          <span class="meta-label">Pokusy:</span>
+          <span id="level-attempts" class="meta-value">0</span>
+        </div>
+        <button id="btn-hint" class="btn btn-sm btn-outline">💡 Nápověda</button>
+      </div>
+    </section>
+
+    <!-- Nápovědní panel (výchozí skrytý) -->
+    <div id="hint-panel" class="hint-panel hidden">
+      <div class="hint-content">
+        <strong>💡 Rada mistra elektrikáře:</strong>
+        <span id="hint-text">Fáze musí projít jističem, nulák jde z N můstku přímo do svítidla.</span>
+      </div>
+      <button id="btn-close-hint" class="btn-close-sm">&times;</button>
+    </div>
+
+    <!-- Hlavní pracovní plocha: Rozvaděč a Zátěž -->
+    <main class="workspace">
+      <!-- Panel nástrojů pro zapojování -->
+      <aside class="wiring-toolbar">
+        <h3>Výběr vodiče</h3>
+        <div class="wire-selector">
+          <button class="wire-btn active" data-color="auto" id="wire-opt-auto">
+            <span class="wire-sample auto-sample">🪄</span>
+            <span class="wire-name">Auto (dle svorky)</span>
+          </button>
+          <button class="wire-btn" data-color="L" id="wire-opt-l">
+            <span class="wire-sample l-sample"></span>
+            <span class="wire-name">L – Fáze (Hnědá)</span>
+          </button>
+          <button class="wire-btn" data-color="N" id="wire-opt-n">
+            <span class="wire-sample n-sample"></span>
+            <span class="wire-name">N – Nulák (Modrá)</span>
+          </button>
+          <button class="wire-btn" data-color="PE" id="wire-opt-pe">
+            <span class="wire-sample pe-sample"></span>
+            <span class="wire-name">PE – Ochranný (Zelenožlutá)</span>
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <h3>Akce zapojení</h3>
+        <div class="quick-actions">
+          <button id="btn-undo" class="btn btn-sm btn-outline" title="Odstranit naposledy přidaný vodič">
+            ↩ Zpět (Vodič)
+          </button>
+          <button id="btn-clear-wires" class="btn btn-sm btn-outline btn-danger" title="Smazat všechny zapojené vodiče">
+            🗑 Smazat vodiče
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <div class="wire-guide-tip">
+          <p><strong>Jak zapojovat:</strong></p>
+          <ol>
+            <li>Klikněte na výchozí svorku (např. <code>L_IN</code>).</li>
+            <li>Klikněte na cílovou svorku (např. <code>L_OUT</code>).</li>
+            <li>Pro smazání vodiče na něj klikněte.</li>
+          </ol>
+        </div>
+      </aside>
+
+      <!-- Pracovní plocha rozvaděče a spotřebičů -->
+      <section class="board-container" id="board-container">
+        <!-- SVG plátno pro vykreslování vodičů -->
+        <svg id="wires-svg" class="wires-canvas" aria-hidden="true">
+          <defs>
+            <!-- Vzor pro zeleno-žlutý ochranný PE vodič -->
+            <pattern id="pe-stripe-pattern" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <rect width="10" height="20" fill="#2e7d32"></rect>
+              <rect x="10" width="10" height="20" fill="#ffeb3b"></rect>
+            </pattern>
+            <!-- Filtry stínu pro 3D efekt vodiče -->
+            <filter id="wire-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.5" flood-color="#000000" />
+            </filter>
+            <filter id="wire-glow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          <!-- Dočasná vodicí čára při natahování vodiče -->
+          <path id="temp-wire-path" class="temp-wire hidden" d="M0,0 L0,0" />
+
+          <!-- Kontejner pro již zapojené vodiče -->
+          <g id="wires-layer"></g>
+        </svg>
+
+        <!-- Fyzický elektrický rozvaděč (Skříň na DIN liště) -->
+        <div class="enclosure">
+          <div class="enclosure-header">
+            <span class="enclosure-badge">ROZVADĚČ NP 230V / 50Hz (TN-S)</span>
+            <span class="ip-rating">Krytí IP40</span>
+          </div>
+
+          <!-- Horní řada svorkovnic (N a PE můstky) -->
+          <div class="terminal-bars-area">
+            <!-- Svorkovnice PE -->
+            <div class="busbar-module busbar-pe" id="module-pe-bar">
+              <div class="busbar-label">Ochranná svorkovnice PE</div>
+              <div class="busbar-terminals">
+                <div class="terminal" data-id="pe_bar_1" data-type="PE" data-label="PE-1" title="Svorka PE 1"></div>
+                <div class="terminal" data-id="pe_bar_2" data-type="PE" data-label="PE-2" title="Svorka PE 2"></div>
+                <div class="terminal" data-id="pe_bar_3" data-type="PE" data-label="PE-3" title="Svorka PE 3"></div>
+                <div class="terminal" data-id="pe_bar_4" data-type="PE" data-label="PE-4" title="Svorka PE 4"></div>
+              </div>
+            </div>
+
+            <!-- Hlavní svorkovnice N (před RCD) -->
+            <div class="busbar-module busbar-n" id="module-n-main-bar">
+              <div class="busbar-label">Hlavní svorkovnice N</div>
+              <div class="busbar-terminals">
+                <div class="terminal" data-id="n_main_1" data-type="N" data-label="N-1" title="Svorka N 1 (hlavní)"></div>
+                <div class="terminal" data-id="n_main_2" data-type="N" data-label="N-2" title="Svorka N 2 (hlavní)"></div>
+                <div class="terminal" data-id="n_main_3" data-type="N" data-label="N-3" title="Svorka N 3 (hlavní)"></div>
+                <div class="terminal" data-id="n_main_4" data-type="N" data-label="N-4" title="Svorka N 4 (hlavní)"></div>
+              </div>
+            </div>
+
+            <!-- Svorkovnice N za proudovým chráničem (RCD-N) -->
+            <div class="busbar-module busbar-n-rcd" id="module-n-rcd-bar">
+              <div class="busbar-label">Svorkovnice N (za RCD chráničem)</div>
+              <div class="busbar-terminals">
+                <div class="terminal" data-id="n_rcd_1" data-type="N" data-label="N_RCD-1" title="Svorka N za chráničem 1"></div>
+                <div class="terminal" data-id="n_rcd_2" data-type="N" data-label="N_RCD-2" title="Svorka N za chráničem 2"></div>
+                <div class="terminal" data-id="n_rcd_3" data-type="N" data-label="N_RCD-3" title="Svorka N za chráničem 3"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kovová DIN lišta pro modulární přístroje -->
+          <div class="din-rail-area">
+            <div class="din-rail">
+              <div class="din-rail-metal"></div>
+
+              <!-- Moduly přístrojů na DIN liště -->
+              <div class="din-modules" id="din-modules-container">
+                <!-- 1. Napájecí přívod (Svorkovnice přívodu ze sítě) -->
+                <div class="din-device module-feed" id="dev-feed">
+                  <div class="device-terminals top-terminals">
+                    <!-- Přívodní svorky -->
+                    <div class="term-wrapper">
+                      <span class="term-name">L</span>
+                      <div class="terminal term-l" data-id="feed_l" data-type="SUPPLY_L" title="Přívod fáze L (230V)"></div>
+                    </div>
+                    <div class="term-wrapper">
+                      <span class="term-name">N</span>
+                      <div class="terminal term-n" data-id="feed_n" data-type="SUPPLY_N" title="Přívod nuláku N"></div>
+                    </div>
+                    <div class="term-wrapper">
+                      <span class="term-name">PE</span>
+                      <div class="terminal term-pe" data-id="feed_pe" data-type="SUPPLY_PE" title="Přívod PE (zem)"></div>
+                    </div>
+                  </div>
+                  <div class="device-body">
+                    <span class="device-icon">🔌</span>
+                    <span class="device-title">PŘÍVOD SÍTĚ</span>
+                    <span class="device-spec">230V AC ~ 50Hz</span>
+                    <div class="feed-indicator active" id="feed-power-led" title="Přívod pod napětím"></div>
+                  </div>
+                  <div class="device-terminals bottom-terminals">
+                    <!-- Pouze horní svorky pro přívod -->
+                  </div>
+                </div>
+
+                <!-- 2. Hlavní vypínač rozvaděče (QS) -->
+                <div class="din-device module-switch" id="dev-main-switch">
+                  <div class="device-terminals top-terminals">
+                    <div class="term-wrapper">
+                      <span class="term-name">L IN</span>
+                      <div class="terminal term-l" data-id="qs_l_in" data-type="L" title="Hlavní vypínač: Fázový vstup"></div>
+                    </div>
+                  </div>
+                  <div class="device-body">
+                    <span class="device-brand">OEZ</span>
+                    <span class="device-title">HLAVNÍ VYPÍNAČ</span>
+                    <span class="device-spec">QS 40A / 1P</span>
+                    <div class="switch-toggle" id="toggle-qs" title="Přepnout hlavní vypínač">
+                      <div class="switch-handle state-on">I</div>
+                    </div>
+                    <div class="flag-indicator state-on" id="flag-qs"></div>
+                  </div>
+                  <div class="device-terminals bottom-terminals">
+                    <div class="term-wrapper">
+                      <span class="term-name">L OUT</span>
+                      <div class="terminal term-l" data-id="qs_l_out" data-type="L" title="Hlavní vypínač: Fázový výstup"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3. Proudový chránič RCD (2-pólový, 40A / 30mA) -->
+                <div class="din-device module-rcd" id="dev-rcd">
+                  <div class="device-terminals top-terminals">
+                    <div class="term-wrapper">
+                      <span class="term-name">L IN</span>
+                      <div class="terminal term-l" data-id="rcd_l_in" data-type="L" title="RCD: Vstup fáze"></div>
+                    </div>
+                    <div class="term-wrapper">
+                      <span class="term-name">N IN</span>
+                      <div class="terminal term-n" data-id="rcd_n_in" data-type="N" title="RCD: Vstup nulového vodiče"></div>
+                    </div>
+                  </div>
+                  <div class="device-body">
+                    <span class="device-brand">Hager</span>
+                    <span class="device-title">CHRÁNIČ RCD</span>
+                    <span class="device-spec">40A / 30mA (0.03A)</span>
+                    <div class="rcd-controls">
+                      <button class="rcd-test-btn" id="btn-rcd-test" title="Testovací tlačítko chrániče (vybaví chránič)">T</button>
+                      <div class="switch-toggle" id="toggle-rcd">
+                        <div class="switch-handle state-on">I</div>
+                      </div>
+                    </div>
+                    <div class="flag-indicator state-on" id="flag-rcd"></div>
+                  </div>
+                  <div class="device-terminals bottom-terminals">
+                    <div class="term-wrapper">
+                      <span class="term-name">L OUT</span>
+                      <div class="terminal term-l" data-id="rcd_l_out" data-type="L" title="RCD: Výstup fáze"></div>
+                    </div>
+                    <div class="term-wrapper">
+                      <span class="term-name">N OUT</span>
+                      <div class="terminal term-n" data-id="rcd_n_out" data-type="N" title="RCD: Výstup nuláku (za chráničem)"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 4. Jistič B10 (pro světla) -->
+                <div class="din-device module-mcb" id="dev-mcb-10">
+                  <div class="device-terminals top-terminals">
+                    <div class="term-wrapper">
+                      <span class="term-name">IN</span>
+                      <div class="terminal term-l" data-id="mcb10_in" data-type="L" title="Jistič B10A: Vstup fáze"></div>
+                    </div>
+                  </div>
+                  <div class="device-body">
+                    <span class="device-brand">Schneider</span>
+                    <span class="device-title">JISTIČ B10</span>
+                    <span class="device-spec">10A / 6kA (Světla)</span>
+                    <div class="switch-toggle" id="toggle-mcb10">
+                      <div class="switch-handle state-on">I</div>
+                    </div>
+                    <div class="flag-indicator state-on" id="flag-mcb10"></div>
+                  </div>
+                  <div class="device-terminals bottom-terminals">
+                    <div class="term-wrapper">
+                      <span class="term-name">OUT</span>
+                      <div class="terminal term-l" data-id="mcb10_out" data-type="L" title="Jistič B10A: Výstup fáze na okruh světel"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 5. Jistič B16 (pro zásuvky) -->
+                <div class="din-device module-mcb" id="dev-mcb-16">
+                  <div class="device-terminals top-terminals">
+                    <div class="term-wrapper">
+                      <span class="term-name">IN</span>
+                      <div class="terminal term-l" data-id="mcb16_in" data-type="L" title="Jistič B16A: Vstup fáze"></div>
+                    </div>
+                  </div>
+                  <div class="device-body">
+                    <span class="device-brand">Schneider</span>
+                    <span class="device-title">JISTIČ B16</span>
+                    <span class="device-spec">16A / 6kA (Zásuvky)</span>
+                    <div class="switch-toggle" id="toggle-mcb16">
+                      <div class="switch-handle state-on">I</div>
+                    </div>
+                    <div class="flag-indicator state-on" id="flag-mcb16"></div>
+                  </div>
+                  <div class="device-terminals bottom-terminals">
+                    <div class="term-wrapper">
+                      <span class="term-name">OUT</span>
+                      <div class="terminal term-l" data-id="mcb16_out" data-type="L" title="Jistič B16A: Výstup fáze na okruh zásuvek"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel spotřebičů a výstupních okruhů (Pravá část) -->
+        <aside class="appliances-panel">
+          <div class="appliances-header">
+            <h3>Okruhy &amp; Spotřebiče</h3>
+            <span class="status-badge" id="appliances-summary-badge">Vypnuto</span>
+          </div>
+
+          <div class="appliances-list">
+            <!-- Spotřebič 1: Světelný okruh / Žárovka -->
+            <div class="appliance-card" id="appliance-light">
+              <div class="appliance-visual">
+                <div class="lamp-fixture">
+                  <div class="lamp-bulb" id="lamp-bulb-visual">
+                    <div class="lamp-filament"></div>
+                  </div>
+                  <div class="lamp-base"></div>
+                </div>
+                <div class="appliance-info">
+                  <h4>Světelný okruh</h4>
+                  <span class="appliance-class" id="light-class-label">Kovové svítidlo (Třída I)</span>
+                  <span class="appliance-state" id="light-state-text">Nesvítí</span>
+                </div>
+              </div>
+              <div class="appliance-terminals">
+                <div class="app-term">
+                  <span class="term-label">L (fáze)</span>
+                  <div class="terminal term-l" data-id="light_l" data-type="L" title="Svítidlo: Svorka L"></div>
+                </div>
+                <div class="app-term">
+                  <span class="term-label">N (nulák)</span>
+                  <div class="terminal term-n" data-id="light_n" data-type="N" title="Svítidlo: Svorka N"></div>
+                </div>
+                <div class="app-term" id="term-box-light-pe">
+                  <span class="term-label">PE (kostra)</span>
+                  <div class="terminal term-pe" data-id="light_pe" data-type="PE" title="Svítidlo: Ochranná svorka na kovový kryt"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spotřebič 2: Zásuvkový okruh 230V -->
+            <div class="appliance-card" id="appliance-socket">
+              <div class="appliance-visual">
+                <div class="socket-fixture" id="socket-visual">
+                  <div class="socket-pin-pe" title="Ochranný kolík PE"></div>
+                  <div class="socket-holes">
+                    <div class="socket-hole hole-l" title="Fázová dutinka L (vlevo)"></div>
+                    <div class="socket-hole hole-n" title="Nulová dutinka N (vpravo)"></div>
+                  </div>
+                  <div class="socket-led" id="socket-tester-led" title="Tester zapojení zásuvky"></div>
+                </div>
+                <div class="appliance-info">
+                  <h4>Zásuvka 230V</h4>
+                  <span class="appliance-class">Vyžaduje chránič 30mA</span>
+                  <span class="appliance-state" id="socket-state-text">Bez napětí</span>
+                </div>
+              </div>
+              <div class="appliance-terminals">
+                <div class="app-term">
+                  <span class="term-label">L (levá)</span>
+                  <div class="terminal term-l" data-id="socket_l" data-type="L" title="Zásuvka: Fázová svorka L"></div>
+                </div>
+                <div class="app-term">
+                  <span class="term-label">N (pravá)</span>
+                  <div class="terminal term-n" data-id="socket_n" data-type="N" title="Zásuvka: Nulová svorka N"></div>
+                </div>
+                <div class="app-term">
+                  <span class="term-label">PE (kolík)</span>
+                  <div class="terminal term-pe" data-id="socket_pe" data-type="PE" title="Zásuvka: Ochranný kolík PE"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spotřebič 3: Bojler / Těžký spotřebič (Úroveň 5) -->
+            <div class="appliance-card hidden" id="appliance-boiler">
+              <div class="appliance-visual">
+                <div class="boiler-fixture">
+                  <div class="boiler-tank" id="boiler-tank-visual">
+                    <div class="boiler-gauge">
+                      <div class="gauge-needle" id="boiler-needle"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="appliance-info">
+                  <h4>Elektrický bojler</h4>
+                  <span class="appliance-class">Kovový plášť (Třída I)</span>
+                  <span class="appliance-state" id="boiler-state-text">Vypnuto</span>
+                </div>
+              </div>
+              <div class="appliance-terminals">
+                <div class="app-term">
+                  <span class="term-label">L (topení)</span>
+                  <div class="terminal term-l" data-id="boiler_l" data-type="L" title="Bojler: Topné těleso fáze"></div>
+                </div>
+                <div class="app-term">
+                  <span class="term-label">N (nulák)</span>
+                  <div class="terminal term-n" data-id="boiler_n" data-type="N" title="Bojler: Nulový vodič N"></div>
+                </div>
+                <div class="app-term">
+                  <span class="term-label">PE (kostra)</span>
+                  <div class="terminal term-pe" data-id="boiler_pe" data-type="PE" title="Bojler: Kovový plášť PE"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Měřicí přístroj (Digitální multimetr rozvaděče) -->
+          <div class="multimeter-box">
+            <div class="multimeter-lcd">
+              <div class="lcd-row">
+                <span class="lcd-label">NAPĚTÍ:</span>
+                <span class="lcd-val" id="meter-voltage">0 V</span>
+              </div>
+              <div class="lcd-row">
+                <span class="lcd-label">PROUD:</span>
+                <span class="lcd-val" id="meter-current">0.00 A</span>
+              </div>
+              <div class="lcd-row">
+                <span class="lcd-label">RCD DIF.:</span>
+                <span class="lcd-val" id="meter-diff">0 mA</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <!-- Spodní ovládací a vyhodnocovací lišta -->
+    <footer class="main-footer">
+      <div class="status-console" id="status-console">
+        <div class="console-icon" id="console-status-icon">⚪</div>
+        <div class="console-message-box">
+          <div class="console-title" id="console-status-title">Připraveno k testu</div>
+          <div class="console-desc" id="console-status-desc">
+            Propojte požadované svorky vodiči a stiskněte tlačítko „Zapnout / Otestovat“.
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-buttons">
+        <button id="btn-test" class="btn btn-primary btn-large" title="Spustit simulaci a otestovat zapojení">
+          ⚡ Zapnout / Otestovat
+        </button>
+        <button id="btn-next-level" class="btn btn-success btn-large hidden" title="Přejít do další úrovně">
+          Další úroveň ➔
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODÁLNÍ OKNA -->
+
+  <!-- 1. Modál: Úroveň splněna -->
+  <div id="modal-level-success" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header success">
+        <span class="modal-icon">🎉</span>
+        <h2>Úroveň úspěšně splněna!</h2>
+      </div>
+      <div class="modal-body">
+        <p id="level-success-msg">Skvělá práce! Rozvaděč je zapojen bezpečně a dle norem.</p>
+        <div class="level-stats-summary">
+          <div class="stat-item">
+            <span class="stat-name">Čas řešení:</span>
+            <span class="stat-value" id="modal-level-time">00:45</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-name">Počet pokusů:</span>
+            <span class="stat-value" id="modal-level-attempts">1</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-name">Vyhodnocení:</span>
+            <span class="stat-value" id="modal-level-eval">Bez jediné chyby!</span>
+          </div>
+        </div>
+        <div class="educational-tip" id="modal-edu-tip">
+          <strong>Odborné ponaučení:</strong> Proudový chránič s citlivostí 30 mA zachraňuje životy. Odpojí okruh dříve, než proud procházející tělem způsobí srdeční zástavu.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-modal-next" class="btn btn-primary">Pokračovat do další úrovně ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Modál: Hra dokončena (Všechny úrovně) -->
+  <div id="modal-game-complete" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header complete">
+        <span class="modal-icon">🏆</span>
+        <h2>Gratulujeme! Mistr elektroinstalací!</h2>
+      </div>
+      <div class="modal-body">
+        <p>Úspěšně jste vyřešili všechny výukové situace a zapojili moderní bytový rozvaděč bez zkratů a ohrožení na životě.</p>
+        <div class="certificate-box">
+          <h3>Osvědčení o úspěšném absolvování simulátoru</h3>
+          <p class="cert-text">Držitel prokázal teoretické i praktické znalosti zapojování jističů, proudových chráničů, svorkovnic N a ochrany PE.</p>
+          <div class="final-stats-grid">
+            <div class="final-stat">
+              <span class="fs-num" id="final-total-time">03:12</span>
+              <span class="fs-label">Celkový čas</span>
+            </div>
+            <div class="final-stat">
+              <span class="fs-num" id="final-total-errors">0</span>
+              <span class="fs-label">Počet chyb</span>
+            </div>
+            <div class="final-stat">
+              <span class="fs-num" id="final-first-try-rate">100 %</span>
+              <span class="fs-label">Úspěšnost napoprvé</span>
+            </div>
+          </div>
+        </div>
+        <p class="disclaimer-note">
+          ⚠️ <em>Upozornění: Tato hra je zjednodušená didaktická simulace. Skutečné zásahy do elektroinstalace pod napětím smí provádět výhradně osoby s příslušnou elektrotechnickou kvalifikací (dle zákona č. 250/2021 Sb. a NV č. 194/2022 Sb.).</em>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-restart-game" class="btn btn-primary">Hrát znovu od 1. úrovně</button>
+        <button id="btn-close-complete" class="btn btn-secondary">Zavřít</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Modál: Statistiky a měření pokroku -->
+  <div id="modal-stats" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-icon">📊</span>
+        <h2>Měření vašeho pokroku</h2>
+      </div>
+      <div class="modal-body">
+        <div class="stats-overview-grid">
+          <div class="stat-card">
+            <span class="sc-title">Dokončeno úrovní</span>
+            <span class="sc-value" id="stats-completed-count">0 / 5</span>
+          </div>
+          <div class="stat-card">
+            <span class="sc-title">Úspěšnost napoprvé</span>
+            <span class="sc-value" id="stats-first-try-rate">0 %</span>
+          </div>
+          <div class="stat-card">
+            <span class="sc-title">Celkem pokusů</span>
+            <span class="sc-value" id="stats-total-attempts">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="sc-title">Celkem chyb / zkratů</span>
+            <span class="sc-value" id="stats-total-errors">0</span>
+          </div>
+        </div>
+
+        <h3>Podrobnosti po úrovních:</h3>
+        <div class="table-responsive">
+          <table class="stats-table">
+            <thead>
+              <tr>
+                <th>Úroveň</th>
+                <th>Stav</th>
+                <th>Pokusy</th>
+                <th>Chyby</th>
+                <th>Čas</th>
+              </tr>
+            </thead>
+            <tbody id="stats-table-body">
+              <!-- Generováno dynamicky z JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-reset-stats" class="btn btn-danger">Vymazat statistiky (Reset)</button>
+        <button id="btn-close-stats" class="btn btn-secondary">Zavřít</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Modál: Teorie a normy zapojování -->
+  <div id="modal-theory" class="modal-backdrop hidden">
+    <div class="modal-card modal-large">
+      <div class="modal-header">
+        <span class="modal-icon">📖</span>
+        <h2>Pravidla bezpečné elektroinstalace</h2>
+      </div>
+      <div class="modal-body theory-content">
+        <div class="theory-section">
+          <h3>Barevné značení vodičů (ČSN EN 60446)</h3>
+          <ul class="wire-legend-list">
+            <li>
+              <span class="legend-swatch l-swatch"></span>
+              <strong>Fázový vodič (L) – Hnědá nebo černá:</strong> Přenáší střídavé napětí 230 V. Prochází spínači a jističi.
+            </li>
+            <li>
+              <span class="legend-swatch n-swatch"></span>
+              <strong>Střední nulový vodič (N) – Světle modrá:</strong> Slouží jako pracovní návratový vodič obvodu.
+            </li>
+            <li>
+              <span class="legend-swatch pe-swatch"></span>
+              <strong>Ochranný vodič (PE) – Zeleno-žlutá:</strong> Spojuje kovové neživé části s uzemněním. <em>Nikdy se nesmí přerušovat spínačem ani jističem a nesmí sloužit pro napájení!</em>
+            </li>
+          </ul>
+        </div>
+
+        <div class="theory-section">
+          <h3>Prvky domovního rozvaděče</h3>
+          <div class="device-theory-grid">
+            <div class="device-theory-item">
+              <h4>Hlavní vypínač</h4>
+              <p>Umožňuje bezpečně a spolehlivě odpojit celý rozvaděč od napětí při údržbě nebo nebezpečí.</p>
+            </div>
+            <div class="device-theory-item">
+              <h4>Jistič (MCB)</h4>
+              <p>Chrání vedení před přetížením (bimetal) a zkratem (elektromagnetická spoušť). B10 pro světla (1.5 mm²), B16 pro zásuvky (2.5 mm²).</p>
+            </div>
+            <div class="device-theory-item">
+              <h4>Proudový chránič (RCD)</h4>
+              <p>Porovnává proud tekoucí fází L a vracející se nulákem N. Pokud vznikne rozdíl větší než 30 mA (proud uniká do země či tělem člověka), chránič obvod během 30 ms odpojí.</p>
+            </div>
+            <div class="device-theory-item">
+              <h4>Oddělené N můstky</h4>
+              <p>Okruh zapojený za proudový chránič musí mít svůj N vodič zapojený výhradně do N svorkovnice za chráničem, jinak chránič okamžitě vybaví!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-close-theory" class="btn btn-primary">Rozumím, zpět do hry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skript hry -->
+  <script src="game.js"></script>
+</body>
+</html>
