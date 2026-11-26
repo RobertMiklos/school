@@ -134,7 +134,11 @@ def _list_gemini_models(api_key: str, exclude: str) -> list[str]:
         for m in models
         if "generateContent" in (m.get("supportedGenerationMethods") or [])
     ]
-    candidates = [n for n in supported if n and n != exclude and "flash" in n.lower()]
+    skip = ("tts", "image", "audio", "robotics", "computer-use", "embedding", "customtools")
+    candidates = [
+        n for n in supported
+        if n and n != exclude and "flash" in n.lower() and not any(s in n.lower() for s in skip)
+    ]
     candidates.sort(reverse=True)
     return candidates
 
@@ -151,16 +155,19 @@ def _call_gemini(api_key: str, model: str, instructions: str, prompt: str) -> st
 
     def _post(model_name: str) -> requests.Response:
         clean_model = model_name.removeprefix("models/")
-        return requests.post(
+        print("Calling Gemini model:", clean_model, flush=True)
+        r = requests.post(
             f"https://generativelanguage.googleapis.com/v1beta/models/{clean_model}:generateContent",
             headers=headers,
             json=payload,
-            timeout=30,
+            timeout=45,
         )
+        print("Gemini status:", clean_model, r.status_code, flush=True)
+        return r
 
     resp = _post(model)
     if resp.status_code == 404:
-        for fallback_model in _list_gemini_models(api_key, model)[:5]:
+        for fallback_model in _list_gemini_models(api_key, model)[:3]:
             resp = _post(fallback_model)
             if resp.status_code != 404:
                 break
