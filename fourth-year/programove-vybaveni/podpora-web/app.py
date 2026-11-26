@@ -37,7 +37,7 @@ if not OPENAI_BASE_URL and not IS_GEMINI_KEY:
         OPENAI_BASE_URL = "https://openrouter.ai/api/v1"
 
 if IS_GEMINI_KEY:
-    OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "gemini-3.8-flash"
+    OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "gemini-3.5-flash-lite"
 elif OPENAI_API_KEY.startswith("gsk_"):
     OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "llama-3.3-70b-versatile"
 elif OPENAI_API_KEY.startswith("sk-or-"):
