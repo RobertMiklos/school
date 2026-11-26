@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import requests
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from openai import OpenAI
@@ -27,26 +28,24 @@ OPENAI_API_KEY = _clean_env("OPENAI_API_KEY") or _clean_env("GROQ_API_KEY") or _
 OPENAI_BASE_URL = _clean_env("OPENAI_BASE_URL") or None
 _custom_model = _clean_env("OPENAI_MODEL")
 
-if not OPENAI_BASE_URL:
+IS_GEMINI_KEY = OPENAI_API_KEY.startswith(("AQ.", "AIza"))
+
+if not OPENAI_BASE_URL and not IS_GEMINI_KEY:
     if OPENAI_API_KEY.startswith("gsk_"):
         OPENAI_BASE_URL = "https://api.groq.com/openai/v1"
-    elif OPENAI_API_KEY.startswith("AIza"):
-        OPENAI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
     elif OPENAI_API_KEY.startswith("sk-or-"):
         OPENAI_BASE_URL = "https://openrouter.ai/api/v1"
 
-if _custom_model:
-    OPENAI_MODEL = _custom_model
+if IS_GEMINI_KEY:
+    OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "gemini-2.5-flash"
 elif OPENAI_API_KEY.startswith("gsk_"):
-    OPENAI_MODEL = "llama-3.3-70b-versatile"
-elif OPENAI_API_KEY.startswith("AIza"):
-    OPENAI_MODEL = "gemini-2.5-flash"
+    OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "llama-3.3-70b-versatile"
 elif OPENAI_API_KEY.startswith("sk-or-"):
-    OPENAI_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
+    OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "meta-llama/llama-3.3-70b-instruct:free"
 else:
-    OPENAI_MODEL = "gpt-4o-mini"
+    OPENAI_MODEL = _custom_model or "gpt-4o-mini"
 
-client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL, timeout=30.0) if OPENAI_API_KEY else None
+client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL, timeout=30.0) if (OPENAI_API_KEY and not IS_GEMINI_KEY) else None
 
 
 # ------------------------------------------------------------
@@ -116,10 +115,64 @@ def health():
             and OPENAI_API_KEY.isascii()
             and not any(c.isspace() for c in OPENAI_API_KEY)
         ),
-        "provider_base_url": OPENAI_BASE_URL or "openai-default",
+        "provider_base_url": "https://generativelanguage.googleapis.com/v1beta" if IS_GEMINI_KEY else (OPENAI_BASE_URL or "openai-default"),
         "openai_model": OPENAI_MODEL,
         "documentation": bool(documentation)
     })
+
+
+def _pick_gemini_model(api_key: str) -> str | None:
+    resp = requests.get(
+        "https://generativelanguage.googleapis.com/v1beta/models",
+        headers={"x-goog-api-key": api_key},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    models = resp.json().get("models") or []
+    supported = [
+        m.get("name", "").removeprefix("models/")
+        for m in models
+        if "generateContent" in (m.get("supportedGenerationMethods") or [])
+    ]
+    for pref in ("flash", "gemini"):
+        for name in supported:
+            if pref in name.lower():
+                return name
+    return supported[0] if supported else None
+
+
+def _call_gemini(api_key: str, model: str, instructions: str, prompt: str) -> str:
+    headers = {
+        "Content-Type": "application/json",
+        "x-goog-api-key": api_key,
+    }
+    payload = {
+        "systemInstruction": {"parts": [{"text": instructions}]},
+        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+    }
+
+    def _post(model_name: str) -> requests.Response:
+        clean_model = model_name.removeprefix("models/")
+        return requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{clean_model}:generateContent",
+            headers=headers,
+            json=payload,
+            timeout=30,
+        )
+
+    resp = _post(model)
+    if resp.status_code == 404:
+        fallback_model = _pick_gemini_model(api_key)
+        if fallback_model and fallback_model != model:
+            resp = _post(fallback_model)
+
+    if not resp.ok:
+        raise RuntimeError(f"Gemini API HTTP {resp.status_code}: {resp.text[:400]}")
+
+    data = resp.json()
+    candidates = data.get("candidates") or []
+    parts = candidates[0].get("content", {}).get("parts", []) if candidates else []
+    return "".join(p.get("text", "") for p in parts).strip()
 
 
 # ------------------------------------------------------------
@@ -144,7 +197,7 @@ def chat():
             "error": "Dotaz je příliš dlouhý."
         }), 400
 
-    if not OPENAI_API_KEY or client is None:
+    if not OPENAI_API_KEY or (not IS_GEMINI_KEY and client is None):
         return jsonify({
             "error": "Na serveru chybí OPENAI_API_KEY."
         }), 500
@@ -184,15 +237,17 @@ DOTAZ ZÁKAZNÍKA:
 """
 
     try:
-        response = client.chat.completions.create(
-            model=OPENAI_MODEL,
-            messages=[
-                {"role": "system", "content": INSTRUCTIONS},
-                {"role": "user", "content": prompt},
-            ],
-        )
-
-        reply = (response.choices[0].message.content or "").strip() if response.choices else ""
+        if IS_GEMINI_KEY:
+            reply = _call_gemini(OPENAI_API_KEY, OPENAI_MODEL, INSTRUCTIONS, prompt)
+        else:
+            response = client.chat.completions.create(
+                model=OPENAI_MODEL,
+                messages=[
+                    {"role": "system", "content": INSTRUCTIONS},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            reply = (response.choices[0].message.content or "").strip() if response.choices else ""
 
         if not reply:
             return jsonify({
