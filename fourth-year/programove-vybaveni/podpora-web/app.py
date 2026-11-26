@@ -19,10 +19,10 @@ app.config["MAX_CONTENT_LENGTH"] = 32 * 1024
 # 1. Proměnné prostředí
 # ------------------------------------------------------------
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-OPENAI_MODEL = os.environ.get("OPENAI_MODEL") or "gpt-4o-mini"
+OPENAI_API_KEY = (os.environ.get("OPENAI_API_KEY") or "").strip().strip('"').strip("'").strip()
+OPENAI_MODEL = (os.environ.get("OPENAI_MODEL") or "gpt-4o-mini").strip()
 
-client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
+client = OpenAI(api_key=OPENAI_API_KEY, timeout=30.0) if OPENAI_API_KEY else None
 
 
 # ------------------------------------------------------------
@@ -87,6 +87,12 @@ def health():
     return jsonify({
         "status": "ok",
         "openai_key": bool(OPENAI_API_KEY),
+        "openai_key_format_ok": bool(
+            OPENAI_API_KEY
+            and OPENAI_API_KEY.startswith("sk-")
+            and OPENAI_API_KEY.isascii()
+            and not any(c.isspace() for c in OPENAI_API_KEY)
+        ),
         "openai_model": bool(OPENAI_MODEL),
         "documentation": bool(documentation)
     })
@@ -117,6 +123,11 @@ def chat():
     if not OPENAI_API_KEY or client is None:
         return jsonify({
             "error": "Na serveru chybí OPENAI_API_KEY."
+        }), 500
+
+    if not OPENAI_API_KEY.isascii() or any(c.isspace() for c in OPENAI_API_KEY):
+        return jsonify({
+            "error": "OPENAI_API_KEY na serveru obsahuje neplatné znaky nebo mezery."
         }), 500
 
     if not OPENAI_MODEL:
@@ -167,7 +178,8 @@ DOTAZ ZÁKAZNÍKA:
         })
 
     except Exception as error:
-        print("OpenAI API error:", repr(error))
+        cause_name = type(error.__cause__).__name__ if error.__cause__ else None
+        print("OpenAI API error:", repr(error), "cause:", cause_name, flush=True)
 
         return jsonify({
             "error": "Nepodařilo se vytvořit odpověď podpory."
