@@ -37,7 +37,7 @@ if not OPENAI_BASE_URL and not IS_GEMINI_KEY:
         OPENAI_BASE_URL = "https://openrouter.ai/api/v1"
 
 if IS_GEMINI_KEY:
-    OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "gemini-2.5-flash"
+    OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "gemini-3.8-flash"
 elif OPENAI_API_KEY.startswith("gsk_"):
     OPENAI_MODEL = _custom_model if (_custom_model and not _custom_model.startswith("gpt-")) else "llama-3.3-70b-versatile"
 elif OPENAI_API_KEY.startswith("sk-or-"):
@@ -121,7 +121,7 @@ def health():
     })
 
 
-def _pick_gemini_model(api_key: str) -> str | None:
+def _list_gemini_models(api_key: str, exclude: str) -> list[str]:
     resp = requests.get(
         "https://generativelanguage.googleapis.com/v1beta/models",
         headers={"x-goog-api-key": api_key},
@@ -134,11 +134,9 @@ def _pick_gemini_model(api_key: str) -> str | None:
         for m in models
         if "generateContent" in (m.get("supportedGenerationMethods") or [])
     ]
-    for pref in ("flash", "gemini"):
-        for name in supported:
-            if pref in name.lower():
-                return name
-    return supported[0] if supported else None
+    candidates = [n for n in supported if n and n != exclude and "flash" in n.lower()]
+    candidates.sort(reverse=True)
+    return candidates
 
 
 def _call_gemini(api_key: str, model: str, instructions: str, prompt: str) -> str:
@@ -162,9 +160,10 @@ def _call_gemini(api_key: str, model: str, instructions: str, prompt: str) -> st
 
     resp = _post(model)
     if resp.status_code == 404:
-        fallback_model = _pick_gemini_model(api_key)
-        if fallback_model and fallback_model != model:
+        for fallback_model in _list_gemini_models(api_key, model)[:5]:
             resp = _post(fallback_model)
+            if resp.status_code != 404:
+                break
 
     if not resp.ok:
         raise RuntimeError(f"Gemini API HTTP {resp.status_code}: {resp.text[:400]}")
