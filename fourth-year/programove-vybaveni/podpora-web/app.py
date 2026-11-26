@@ -7,7 +7,7 @@ from openai import OpenAI
 
 
 # ============================================================
-# Backend: Flask + Render + OpenAI Responses API
+# Backend: Flask + Render + OpenAI-compatible Chat API
 # ============================================================
 
 app = Flask(__name__)
@@ -19,10 +19,34 @@ app.config["MAX_CONTENT_LENGTH"] = 32 * 1024
 # 1. Proměnné prostředí
 # ------------------------------------------------------------
 
-OPENAI_API_KEY = (os.environ.get("OPENAI_API_KEY") or "").strip().strip('"').strip("'").strip()
-OPENAI_MODEL = (os.environ.get("OPENAI_MODEL") or "gpt-4o-mini").strip()
+def _clean_env(name: str) -> str:
+    return (os.environ.get(name) or "").strip().strip('"').strip("'").strip()
 
-client = OpenAI(api_key=OPENAI_API_KEY, timeout=30.0) if OPENAI_API_KEY else None
+
+OPENAI_API_KEY = _clean_env("OPENAI_API_KEY") or _clean_env("GROQ_API_KEY") or _clean_env("GEMINI_API_KEY")
+OPENAI_BASE_URL = _clean_env("OPENAI_BASE_URL") or None
+_custom_model = _clean_env("OPENAI_MODEL")
+
+if not OPENAI_BASE_URL:
+    if OPENAI_API_KEY.startswith("gsk_"):
+        OPENAI_BASE_URL = "https://api.groq.com/openai/v1"
+    elif OPENAI_API_KEY.startswith("AIza"):
+        OPENAI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+    elif OPENAI_API_KEY.startswith("sk-or-"):
+        OPENAI_BASE_URL = "https://openrouter.ai/api/v1"
+
+if _custom_model:
+    OPENAI_MODEL = _custom_model
+elif OPENAI_API_KEY.startswith("gsk_"):
+    OPENAI_MODEL = "llama-3.3-70b-versatile"
+elif OPENAI_API_KEY.startswith("AIza"):
+    OPENAI_MODEL = "gemini-2.5-flash"
+elif OPENAI_API_KEY.startswith("sk-or-"):
+    OPENAI_MODEL = "meta-llama/llama-3.3-70b-instruct:free"
+else:
+    OPENAI_MODEL = "gpt-4o-mini"
+
+client = OpenAI(api_key=OPENAI_API_KEY, base_url=OPENAI_BASE_URL, timeout=30.0) if OPENAI_API_KEY else None
 
 
 # ------------------------------------------------------------
@@ -89,11 +113,11 @@ def health():
         "openai_key": bool(OPENAI_API_KEY),
         "openai_key_format_ok": bool(
             OPENAI_API_KEY
-            and OPENAI_API_KEY.startswith("sk-")
             and OPENAI_API_KEY.isascii()
             and not any(c.isspace() for c in OPENAI_API_KEY)
         ),
-        "openai_model": bool(OPENAI_MODEL),
+        "provider_base_url": OPENAI_BASE_URL or "openai-default",
+        "openai_model": OPENAI_MODEL,
         "documentation": bool(documentation)
     })
 
@@ -160,13 +184,15 @@ DOTAZ ZÁKAZNÍKA:
 """
 
     try:
-        response = client.responses.create(
+        response = client.chat.completions.create(
             model=OPENAI_MODEL,
-            instructions=INSTRUCTIONS,
-            input=prompt
+            messages=[
+                {"role": "system", "content": INSTRUCTIONS},
+                {"role": "user", "content": prompt},
+            ],
         )
 
-        reply = (response.output_text or "").strip()
+        reply = (response.choices[0].message.content or "").strip() if response.choices else ""
 
         if not reply:
             return jsonify({
