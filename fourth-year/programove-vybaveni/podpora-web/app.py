@@ -148,27 +148,39 @@ def _call_gemini(api_key: str, model: str, instructions: str, prompt: str) -> st
         "Content-Type": "application/json",
         "x-goog-api-key": api_key,
     }
-    payload = {
+    base_payload = {
         "systemInstruction": {"parts": [{"text": instructions}]},
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
     }
+    fast_payload = {
+        **base_payload,
+        "generationConfig": {
+            "thinkingConfig": {"thinkingLevel": "MINIMAL"}
+        },
+    }
 
-    def _post(model_name: str) -> requests.Response:
+    def _post(model_name: str, body: dict) -> requests.Response:
         clean_model = model_name.removeprefix("models/")
         print("Calling Gemini model:", clean_model, flush=True)
         r = requests.post(
             f"https://generativelanguage.googleapis.com/v1beta/models/{clean_model}:generateContent",
             headers=headers,
-            json=payload,
-            timeout=45,
+            json=body,
+            timeout=90,
         )
         print("Gemini status:", clean_model, r.status_code, flush=True)
         return r
 
-    resp = _post(model)
+    active_model = model
+    resp = _post(active_model, fast_payload)
+    if resp.status_code == 400 and "thinking" in resp.text.lower():
+        resp = _post(active_model, base_payload)
     if resp.status_code == 404:
         for fallback_model in _list_gemini_models(api_key, model)[:3]:
-            resp = _post(fallback_model)
+            active_model = fallback_model
+            resp = _post(active_model, fast_payload)
+            if resp.status_code == 400 and "thinking" in resp.text.lower():
+                resp = _post(active_model, base_payload)
             if resp.status_code != 404:
                 break
 
